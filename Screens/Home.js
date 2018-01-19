@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux'
 import { StackNavigator } from 'react-navigation';
 import { StyleSheet} from 'react-native';
 import {Header} from 'react-native-elements'
@@ -11,11 +12,12 @@ import {
   Text,
   GridRow,
   Subtitle,
-  Card
+  Card,
+  Image
 } from '@shoutem/ui'
 import { Font, AppLoading } from 'expo';
 
-export default class Home extends React.Component {
+class Home extends React.Component {
   constructor(){
     super();
     this.state = {
@@ -37,65 +39,72 @@ export default class Home extends React.Component {
       'Rubik-Regular': require('../node_modules/@shoutem/ui/fonts/Rubik-Regular.ttf'),
       'rubicon-icon-font': require('../node_modules/@shoutem/ui/fonts/rubicon-icon-font.ttf'),
     })
-    .then(()=>this.setState({ fontsAreLoaded: true }))
+    .then(() => this.setState({ fontsAreLoaded: true }))
   }
+
   render() {
-    if(!this.state.fontsAreLoaded){
+    if (!this.state.fontsAreLoaded){
       return <AppLoading />
     }
-
-    const rowData = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const cellViews = rowData.map((day) => {
+    console.log(this.props)
+    const {calendar, navigation} = this.props
+    const mealOrder = ['breakfast', 'lunch', 'dinner']
+    const cellViews = calendar.map(({day, meals}) => {
       return (
         <GridRow columns={4} key={day}>
           <Tile style={{alignItems:'center'},{justifyContent: 'center'}}>
             <Subtitle>{day}</Subtitle>
           </Tile>
-          <Tile style={{alignItems:'center'},{justifyContent: 'center'}}>
-            <Icon
-              onPress={()=>this.props.navigation.navigate('AddMeal', {day: day, time: 'breakfast'})}
-              name="restaurant" />
-          </Tile>
-          <Tile style={{alignItems:'center'},{justifyContent: 'center'}}>
-            <Icon
-              onPress={()=>this.props.navigation.navigate('AddMeal', {day: day, time: 'Lunch'})}
-              name="restaurant"/>
-          </Tile>
-          <Tile style={{alignItems:'center'},{justifyContent: 'center'}}>
-            <Icon
-              onPress = {() => this.props.navigation.navigate('AddMeal', {day: day, time: 'Dinner'})}
-            name="restaurant"/>
-          </Tile>
+          {mealOrder.map(meal => {
+            return (
+              <Tile key = {meal} style={{alignItems:'center'},{justifyContent: 'center'}}>
+                {
+                  meals[meal] ?
+                  <Image
+                    styleName='small'
+                    source={{uri:meals[meal].image}}
+                  />
+                  :
+                  <Icon
+                    onPress={() => navigation.navigate('AddMeal', {day, meal})}
+                    name="restaurant" />
+                }
+                </Tile>
+            )
+          })}
         </GridRow>
       )
     })
     return (
       <Screen>
         <GridRow columns={4}>
-          <Tile style={{alignItems:'center'},{justifyContent: 'center'}}>
-            <Subtitle>Day</Subtitle>
-          </Tile>
-          <Tile style={{alignItems:'center'},{justifyContent: 'center'}}>
-            <Subtitle>Breakfast</Subtitle>
-          </Tile>
-          <Tile style={{alignItems:'center'},{justifyContent: 'center'}}>
-            <Subtitle>Lunch</Subtitle>
-          </Tile>
-          <Tile style={{alignItems:'center'},{justifyContent: 'center'}}>
-            <Subtitle>Dinner</Subtitle>
-          </Tile>
+          <Tile></Tile>
+          {mealOrder.map(meal => {
+            return (
+              <Tile key={meal} style={{alignItems:'center'},{justifyContent: 'center'}}>
+                <Subtitle>{meal}</Subtitle>
+              </Tile>
+            )
+          })}
         </GridRow>
         {cellViews}
       </Screen>
-    );
+    )
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-    // backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const mapStateToProps = ({calendar, food}) => {
+  const dayOrder = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+  return {
+    calendar: dayOrder.map((day) => ({
+      day,
+      meals: Object.keys(calendar[day]).reduce((meals, meal) => {
+        meals[meal] = calendar[day][meal]
+          ? food[calendar[day][meal]]
+          : null
+        return meals
+      }, {})
+    })),
+  }
+}
+export default connect(mapStateToProps)(Home)
