@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux'
+import {removeFromCalendar} from '../reducers'
 import { StackNavigator } from 'react-navigation';
-import { StyleSheet} from 'react-native';
+import { TouchableOpacity} from 'react-native';
 import {Header} from 'react-native-elements'
 import {
   Screen,
@@ -60,10 +61,12 @@ class Home extends React.Component {
               <Tile key = {meal} style={{alignItems:'center'},{justifyContent: 'center'}}>
                 {
                   meals[meal] ?
-                  <Image
-                    styleName='small'
-                    source={{uri:meals[meal].image}}
-                  />
+                  <TouchableOpacity onPress = {() => this.props.removeRecipe(day, meal)}>
+                    <Image
+                      styleName='small'
+                      source={{uri:meals[meal].image}}
+                    />
+                  </TouchableOpacity>
                   :
                   <Icon
                     onPress={() => navigation.navigate('AddMeal', {day, meal})}
@@ -107,4 +110,11 @@ const mapStateToProps = ({calendar, food}) => {
     })),
   }
 }
-export default connect(mapStateToProps)(Home)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    removeRecipe(day,meal){
+      dispatch(removeFromCalendar({day, meal}))
+    }
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Home)

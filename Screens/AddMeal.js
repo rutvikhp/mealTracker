@@ -37,7 +37,6 @@ class AddMeal extends Component {
     const day = this.props.navigation.state.params.day
     const time = this.props.navigation.state.params.meal
     const recipies = this.state.recipies
-    console.log(recipies)
     return (
       <Screen>
         <ScrollView>
@@ -56,14 +55,6 @@ class AddMeal extends Component {
                   imageSrc={{uri: recipe.image}}
                   title={recipe.label}
                 />
-                {/* {
-                  <Tile>
-                  <Image
-                      styleName="medium"
-                      source={{ uri: 'receipe.image'}}
-                    />
-                    </Tile>
-                } */}
                 <Divider /></View>
               )
             })
