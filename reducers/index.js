@@ -1,9 +1,8 @@
 import { combineReducers } from 'redux'
 
-import {
-  ADD_RECIPE,
-  REMOVE_FROM_CALENDAR,
-} from './actions'
+const ADD_RECIPE = 'ADD_RECIPE'
+const REMOVE_FROM_CALENDAR = 'REMOVE_FROM_CALENDAR'
+
 
 function food (state = {}, action) {
   switch (action.type) {
@@ -60,6 +59,14 @@ export function addRecipe ({ day, recipe, meal }) {
   return {
     type: ADD_RECIPE,
     recipe,
+    day,
+    meal,
+  }
+}
+
+export function removeFromCalendar ({ day, meal }) {
+  return {
+    type: REMOVE_FROM_CALENDAR,
     day,
     meal,
   }

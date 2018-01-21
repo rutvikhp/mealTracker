@@ -37,7 +37,6 @@ class AddMeal extends Component {
     const day = this.props.navigation.state.params.day
     const time = this.props.navigation.state.params.meal
     const recipies = this.state.recipies
-    console.log(recipies)
     return (
       <Screen>
         <ScrollView>
@@ -56,14 +55,6 @@ class AddMeal extends Component {
                   imageSrc={{uri: recipe.image}}
                   title={recipe.label}
                 />
-                {/* {
-                  <Tile>
-                  <Image
-                      styleName="medium"
-                      source={{ uri: 'receipe.image'}}
-                    />
-                    </Tile>
-                } */}
                 <Divider /></View>
               )
             })
@@ -74,11 +65,6 @@ class AddMeal extends Component {
   }
 }
 
-const mapStateToProps = ({calendar, food}) => {
-  return {
-
-  }
-}
 const mapDispatchToProps = (dispatch) => {
   return {
     addToCalender(day, recipe, meal){
@@ -86,4 +72,4 @@ const mapDispatchToProps = (dispatch) => {
     }
   }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(AddMeal)
+export default connect(null, mapDispatchToProps)(AddMeal)
