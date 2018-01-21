@@ -65,11 +65,6 @@ class AddMeal extends Component {
   }
 }
 
-const mapStateToProps = ({calendar, food}) => {
-  return {
-
-  }
-}
 const mapDispatchToProps = (dispatch) => {
   return {
     addToCalender(day, recipe, meal){
@@ -77,4 +72,4 @@ const mapDispatchToProps = (dispatch) => {
     }
   }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(AddMeal)
+export default connect(null, mapDispatchToProps)(AddMeal)
