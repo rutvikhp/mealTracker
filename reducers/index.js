@@ -3,55 +3,41 @@ import { combineReducers } from 'redux'
 const ADD_RECIPE = 'ADD_RECIPE'
 const REMOVE_FROM_CALENDAR = 'REMOVE_FROM_CALENDAR'
 
-
-function food (state = {}, action) {
-  switch (action.type) {
-    case ADD_RECIPE :
-      const { recipe } = action
-      return {
-        ...state,
-        [recipe.label]: recipe,
-      }
-    default :
-      return state
-  }
-}
-
 const initialCalendarState = {
   sunday: {
-    breakfast: null,
-    lunch: null,
-    dinner: null,
+    breakfast: {},
+    lunch: {},
+    dinner: {},
   },
   monday: {
-    breakfast: null,
-    lunch: null,
-    dinner: null,
+    breakfast: {},
+    lunch: {},
+    dinner: {},
   },
   tuesday: {
-    breakfast: null,
-    lunch: null,
-    dinner: null,
+    breakfast: {},
+    lunch: {},
+    dinner: {},
   },
   wednesday: {
-    breakfast: null,
-    lunch: null,
-    dinner: null,
+    breakfast: {},
+    lunch: {},
+    dinner: {},
   },
   thursday: {
-    breakfast: null,
-    lunch: null,
-    dinner: null,
+    breakfast: {},
+    lunch: {},
+    dinner: {},
   },
   friday: {
-    breakfast: null,
-    lunch: null,
-    dinner: null,
+    breakfast: {},
+    lunch: {},
+    dinner: {},
   },
   saturday: {
-    breakfast: null,
-    lunch: null,
-    dinner: null,
+    breakfast: {},
+    lunch: {},
+    dinner: {},
   },
 }
 
@@ -81,7 +67,7 @@ function calendar (state = initialCalendarState, action) {
         ...state,
         [day]: {
           ...state[day],
-          [meal]: recipe.label,
+          [meal]: recipe,
         }
       }
     case REMOVE_FROM_CALENDAR :
@@ -89,7 +75,7 @@ function calendar (state = initialCalendarState, action) {
         ...state,
         [day]: {
           ...state[day],
-          [meal]: null,
+          [meal]: {},
         }
       }
     default :
@@ -98,6 +84,5 @@ function calendar (state = initialCalendarState, action) {
 }
 
 export default combineReducers({
-  food,
   calendar,
 })

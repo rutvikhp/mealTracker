@@ -49,8 +49,9 @@ class Home extends React.Component {
     }
     console.log(this.props)
     const {calendar, navigation} = this.props
+    const days = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday']
     const mealOrder = ['breakfast', 'lunch', 'dinner']
-    const cellViews = calendar.map(({day, meals}) => {
+    const cellViews = days.map((day) => {
       return (
         <GridRow columns={4} key={day}>
           <Tile style={{alignItems:'center'},{justifyContent: 'center'}}>
@@ -60,11 +61,11 @@ class Home extends React.Component {
             return (
               <Tile key = {meal} style={{alignItems:'center'},{justifyContent: 'center'}}>
                 {
-                  meals[meal] ?
+                  Object.keys(calendar[day][meal]).length ?
                   <TouchableOpacity onPress = {() => this.props.removeRecipe(day, meal)}>
                     <Image
                       styleName='small'
-                      source={{uri:meals[meal].image}}
+                      source={{uri:calendar[day][meal].image}}
                     />
                   </TouchableOpacity>
                   :
@@ -96,23 +97,15 @@ class Home extends React.Component {
   }
 }
 
-const mapStateToProps = ({calendar, food}) => {
-  const dayOrder = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+const mapStateToProps = (state) => {
   return {
-    calendar: dayOrder.map((day) => ({
-      day,
-      meals: Object.keys(calendar[day]).reduce((meals, meal) => {
-        meals[meal] = calendar[day][meal]
-          ? food[calendar[day][meal]]
-          : null
-        return meals
-      }, {})
-    })),
+    calendar: state.calendar
   }
+
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-    removeRecipe(day,meal){
+    removeRecipe(day, meal){
       dispatch(removeFromCalendar({day, meal}))
     }
   }
